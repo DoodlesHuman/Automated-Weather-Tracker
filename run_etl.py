@@ -4,6 +4,7 @@ from Open Weather API, and transform to a pandas dataframe
 in order to load to clean csv file.
 """
 
+import sys
 import os
 from datetime import datetime, timezone
 import requests 
@@ -123,3 +124,27 @@ def load_data(new_data, file_path=DATA_FILE_PATH):
     
     combined_data.to_csv(file_path, index=False)
     print(f"Successfully saved data to {file_path}.")
+
+if __name__ == "__main__":
+    print("Starting Weather ETL process...")
+    
+    try:
+        # 1. Extract
+        raw_forecasts = fetch_weather_data(API_KEY, CITIES)
+        
+        # STOP IF EMPTY
+        if not raw_forecasts:
+            print("❌ CRITICAL: No data fetched. Check API Key or Network.")
+            sys.exit(1)  # <--- This forces GitHub Actions to mark it as FAILED (Red)
+        
+        # 2. Transform
+        forecast_df = transform_data(raw_forecasts)
+        
+        # 3. Load
+        load_data(forecast_df)
+        print("✅ ETL process completed successfully.")
+        
+    except Exception as e:
+        print(f"❌ Pipeline failed with error: {e}")
+        sys.exit(1) # Fail for any other crash
+        
