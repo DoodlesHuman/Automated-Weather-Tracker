@@ -14,6 +14,11 @@ import pandas as pd
 # Extract
 API_KEY = os.environ.get("OPENWEATHER_API_KEY")
 
+if API_KEY:
+    print(f"✅ API Key found! Length: {len(API_KEY)}")
+else:
+    print("❌ CRITICAL: API Key is None. Check GitHub Secrets.")
+
 CITIES = [
     (52.5200, 13.4050, "Berlin")] # (lat, lon, city_name)
 DATA_FILE_PATH = 'data/weather_forecast.csv'
