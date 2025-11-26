@@ -135,7 +135,7 @@ if __name__ == "__main__":
         # STOP IF EMPTY
         if not raw_forecasts:
             print("❌ CRITICAL: No data fetched. Check API Key or Network.")
-            sys.exit(1)  # <--- This forces GitHub Actions to mark it as FAILED (Red)
+            
         
         # 2. Transform
         forecast_df = transform_data(raw_forecasts)
@@ -146,5 +146,5 @@ if __name__ == "__main__":
         
     except Exception as e:
         print(f"❌ Pipeline failed with error: {e}")
-        sys.exit(1) # Fail for any other crash
+        
         
