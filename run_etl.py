@@ -93,9 +93,7 @@ def transform_data(raw_data_list):
 """
 # Load
 def load_data(new_data, file_path=DATA_FILE_PATH):
-    """
-    Loads the new forecast data, appending it to the existing CSV file.
-    """
+
     if new_data.empty:
         print("No new data to load.")
         return
