@@ -91,71 +91,37 @@ def transform_data(raw_data_list):
     print(f"Transformed {len(df)} rows into a DataFrame.")
     return df
 
-# --- LOAD (Debug Version) ---
+# Load
 def load_data(new_data, file_path=DATA_FILE_PATH):
-    """
-    Verbose version to debug saving issues.
-    """
-    print("--- STARTING LOAD STEP ---")
-    
+
     if new_data.empty:
-        print("❌ New data is empty. Nothing to save.")
+        print("No new data to load.")
         return
 
-    # 1. Print current working directory
-    import os
-    print(f"📂 Current Working Directory: {os.getcwd()}")
+    print(f"Loading data to {file_path}...")
+    try:
+        existing_data = pd.read_csv(file_path)
+        combined_data = pd.concat([existing_data, new_data], ignore_index=True)
+        
+        # De-duplication, as the 5-day forecast will overlap each day
+        # We keep the latest fetched forecast for any given city/time
+        combined_data = combined_data.drop_duplicates(
+            subset=['city', 'forecast_time'], 
+            keep='last'
+        )
+        
+    except FileNotFoundError:
+        print("File not found. Creating new file.")
+        combined_data = new_data
     
-    # 2. Make sure the path is absolute so we know EXACTLY where it goes
-    abs_path = os.path.abspath(file_path)
-    print(f"🎯 Target File Path: {abs_path}")
-
-    # 3. Prepare the data
-    combined_data = new_data
-    if os.path.exists(file_path) and os.path.getsize(file_path) > 0:
-        print("   Found existing file. Appending...")
-        try:
-            existing_data = pd.read_csv(file_path)
-            combined_data = pd.concat([existing_data, new_data], ignore_index=True)
-            combined_data = combined_data.drop_duplicates(
-                subset=['city', 'forecast_time'], 
-                keep='last'
-            )
-        except Exception as e:
-            print(f"   ⚠️ Error reading existing file: {e}. Starting fresh.")
-    else:
-        print("   Creating new file (File not found or empty).")
+    # Ensure directory exists
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
     
-    # 4. Ensure directory exists
-    directory = os.path.dirname(abs_path)
-    if not os.path.exists(directory):
-        print(f"   Directory {directory} did not exist. Creating it...")
-        os.makedirs(directory, exist_ok=True)
-    
-    # 5. SORT AND SAVE
-    print(f"   Sorting {len(combined_data)} rows...")
+    # Sort data for readability
     combined_data.sort_values(by=['city', 'forecast_time'], inplace=True)
     
-    print("   💾 Attempting to write to CSV...")
-    try:
-        combined_data.to_csv(abs_path, index=False)
-        print("   ✅ Python says: Write successful.")
-    except PermissionError:
-        print("   ❌ CRITICAL ERROR: Permission Denied!")
-        print("   👉 Is the CSV file open in Excel? Close it and try again.")
-        return
-    except Exception as e:
-        print(f"   ❌ CRITICAL ERROR: Could not write file: {e}")
-        return
-
-    # 6. Verify it actually happened
-    if os.path.exists(abs_path):
-        size = os.path.getsize(abs_path)
-        print(f"   🔎 Verification: File exists. Size: {size} bytes.")
-    else:
-        print("   ❌ Verification Failed: File still does not exist.")
-
-    print("--- LOAD STEP FINISHED ---")
+    combined_data.to_csv(file_path, index=False)
+    print(f"Successfully saved data to {file_path}.")
 
 if __name__ == "__main__":
     print("Starting Weather ETL process...")
