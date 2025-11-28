@@ -104,6 +104,7 @@ def load_data(new_data, file_path=DATA_FILE_PATH):
 
     try:
         existing_data = pd.read_csv(file_path)
+        existing_data['forecast_time'] = pd.to_datetime(existing_data['forecast_time'])
         combined_data = pd.concat([existing_data, new_data], ignore_index = True)
 
         # De-duplication of data to keep the latest forecast only
