@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: Check out repo
         uses: actions/checkout@v3
+        with:
+          ref: main # <--- 1. Force checkout of the branch tip, not the trigger commit
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -30,6 +32,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       
+      # <--- 2. Safety Step: Pull any changes that happened while setup was running
+      - name: Pull Latest Changes
+        run: git pull origin main
+
       - name: Run Weather ETL Script
         run: python run_etl.py
 
