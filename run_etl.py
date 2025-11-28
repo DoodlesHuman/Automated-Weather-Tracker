@@ -93,7 +93,9 @@ def transform_data(raw_data_list):
 
 # Load
 def load_data(new_data, file_path=DATA_FILE_PATH):
-
+    """
+    Loadind data to the file
+    """
     if new_data.empty:
         print("No new data to load.")
         return
@@ -110,8 +112,9 @@ def load_data(new_data, file_path=DATA_FILE_PATH):
             keep='last'
         )
         
-    except FileNotFoundError:
-        print("File not found. Creating new file.")
+    except Exception as e:
+        print(f"Error raised: {e}")
+        print("Creating new file")
         combined_data = new_data
     
     # Ensure directory exists
