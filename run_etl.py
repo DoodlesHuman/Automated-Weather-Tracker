@@ -104,27 +104,29 @@ def load_data(new_data, file_path=DATA_FILE_PATH):
 
     try:
         existing_data = pd.read_csv(file_path)
+        
         existing_data['forecast_time'] = pd.to_datetime(existing_data['forecast_time'])
-        combined_data = pd.concat([existing_data, new_data], ignore_index = True)
 
-        # De-duplication of data to keep the latest forecast only
+        combined_data = pd.concat([existing_data, new_data], ignore_index=True)
+
+        # Now this will work because both are Datetime objects
         combined_data = combined_data.drop_duplicates(
-            subset = ['city', 'forecast_time'], keep = 'last'
+            subset=['city', 'forecast_time'], keep='last'
         )
         
     except Exception as e:
-        print(f"Error raised: {e}")
-        print("Creating new file")
+        print(f"Error reading file or mismatch: {e}")
+        print("Creating new file from scratch.")
         combined_data = new_data
 
     # Ensure directory exists
     os.makedirs(os.path.dirname(file_path), exist_ok=True)
 
     # Sorting data
-    combined_data.sort_values(by = ['city', 'forecast_time'], inplace = True)
+    combined_data.sort_values(by=['city', 'forecast_time'], inplace=True)
 
-    combined_data.to_csv(file_path, index = False)
-    print(f"Succesfully saved data to {file_path}")
+    combined_data.to_csv(file_path, index=False)
+    print(f"Successfully saved {len(combined_data)} rows to {file_path}")
 
 if __name__ == "__main__":
     print("Starting Weather ETL process...")
