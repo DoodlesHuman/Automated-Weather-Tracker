@@ -13,6 +13,8 @@ This project is an automated **ETL (Extract, Transform, Load) pipeline** designe
 
 The pipeline runs entirely on **GitHub Actions**, removing the need for a dedicated server.
 
+
+
 ```mermaid
 graph TD
     A[☁️ OpenWeatherMap API] -->|Fetch JSON| B(GitHub Actions Runner)
