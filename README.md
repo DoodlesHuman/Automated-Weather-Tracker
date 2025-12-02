@@ -1,6 +1,5 @@
 # 🌦️ Automated Weather Data Pipeline
 
-![Build Status](https://github.com/DoodlesHuman/Automated-Weather-Tracker/actions/workflows/main.yml/badge.svg)
 ![Python](https://img.shields.io/badge/Python-3.10-blue)
 ![ETL](https://img.shields.io/badge/Pipeline-ETL-green)
 
