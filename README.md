@@ -14,6 +14,17 @@ This project is an automated **ETL (Extract, Transform, Load) pipeline** designe
 
 The pipeline runs entirely on **GitHub Actions**, removing the need for a dedicated server.
 
+```mermaid
+graph TD
+    A[☁️ OpenWeatherMap API] -->|Fetch JSON| B(GitHub Actions Runner)
+    B -->|Run ETL Script| C{Python Logic}
+    
+    subgraph Transformation
+    C -->|1. Extract| D[Raw Data]
+    D -->|2. Clean & Dedupe| E[Pandas DataFrame]
+    end
+    
+    E -->|Save| F[(📂 weather_forecast.csv)]
 
 
 1.  **Extract:** Python script calls the **OpenWeatherMap API** (5-day/3-hour forecast endpoint).
