@@ -26,7 +26,7 @@ graph TD
     end
     
     E -->|Save| F[(📂 weather_forecast.csv)]
-
+```
 
 1.  **Extract:** Python script calls the **OpenWeatherMap API** (5-day/3-hour forecast endpoint).
 2.  **Transform:**
