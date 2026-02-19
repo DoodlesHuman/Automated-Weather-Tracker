@@ -16,9 +16,9 @@ import pandas as pd
 API_KEY = os.environ.get("OPENWEATHER_API_KEY")
 
 if API_KEY:
-    print(f"✅ API Key found! Length: {len(API_KEY)}")
+    print(f"API Key found! Length: {len(API_KEY)}")
 else:
-    print("❌ CRITICAL: API Key is None. Check GitHub Secrets.")
+    print("CRITICAL: API Key is None. Check GitHub Secrets.")
 
 CITIES = [
     (52.5200, 13.4050, "Berlin")] # (lat, lon, city_name)
@@ -137,7 +137,7 @@ if __name__ == "__main__":
         
         # STOP IF EMPTY
         if not raw_forecasts:
-            print("❌ CRITICAL: No data fetched. Check API Key or Network.")
+            print("CRITICAL: No data fetched. Check API Key or Network.")
             
         
         # 2. Transform
@@ -145,9 +145,9 @@ if __name__ == "__main__":
         
         # 3. Load
         load_data(forecast_df)
-        print("✅ ETL process completed successfully.")
+        print("ETL process completed successfully.")
         
     except Exception as e:
-        print(f"❌ Pipeline failed with error: {e}")
+        print(f"Pipeline failed with error: {e}")
         
         
